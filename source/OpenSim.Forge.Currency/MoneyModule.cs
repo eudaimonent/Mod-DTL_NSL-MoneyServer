@@ -50,8 +50,8 @@ using NSL.XmlRpc;
 
 //using Mono.Addins;
 
-[assembly: Addin("DTLNSLMoneyModule", "0.1")]
-[assembly: AddinDependency("OpenSim", "0.5")]
+ [assembly: Addin("DTLNSLMoneyModule", "0.1")]
+ [assembly: AddinDependency("OpenSim", "0.5")]
 
 
 namespace OpenSim.Forge.Currency
@@ -1451,7 +1451,7 @@ namespace OpenSim.Forge.Currency
 					{
 						ret = true;
 					}
-else 				else
+     				else
 					{
 						if (resultTable.Contains("banker"))
 						{

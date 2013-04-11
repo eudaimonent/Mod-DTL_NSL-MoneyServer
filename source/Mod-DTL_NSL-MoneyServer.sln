@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenSim.Grid.MoneyServer", "OpenSim.Grid.MoneyServer\OpenSim.Grid.MoneyServer.csproj", "{647D0E89-7A21-40F2-AE63-BF0D2E63D17B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{976D6DD7-5322-4A5C-9051-80D58B00316B} = {976D6DD7-5322-4A5C-9051-80D58B00316B}
