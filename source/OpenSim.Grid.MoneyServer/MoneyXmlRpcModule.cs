@@ -400,7 +400,7 @@ namespace OpenSim.Grid.MoneyServer
 							{
 								if (amount!=0)
 								{
-								/*  string snd_message = "";
+								    string snd_message = "";
 									string rcv_message = "";
 
 									if (transaction.Type==(int)TransactionType.Gift) {
@@ -416,7 +416,7 @@ namespace OpenSim.Grid.MoneyServer
 									}
 									else if (transaction.Type==(int)TransactionType.ObjectPays) {		// ObjectGiveMoney
 										rcv_message = m_BalanceMessageGetMoney;
-									} */
+									}
 									Hashtable resultTable = genericCurrencyXMLRPCRequest(confirmTable, "SendConfirmLink", user.SimIP);
 
 
@@ -644,9 +644,11 @@ namespace OpenSim.Grid.MoneyServer
 				m_log.Error("[MONEY RPC] handleAddBankerMoney: Not allowed add money to avatar!!");
 				m_log.Error("[MONEY RPC] handleAddBankerMoney: Set BankerAvatar at [MoneyServer] in MoneyServer.ini");
 				responseData["message"] = "not allowed add money to avatar!";
+				responseData["banker"]  = false;
 				return response;
 			}
 
+			responseData["banker"] = true;
 			fmID = senderID + "@" + bankerUserServIP;
 			toID = bankerID + "@" + bankerUserServIP;
 
@@ -1054,7 +1056,8 @@ namespace OpenSim.Grid.MoneyServer
 						bool updateSender = true;
 						bool updateReceiv = true;
 						if (transaction.Sender==transaction.Receiver) updateSender = false;
-						if (transaction.Type==(int)TransactionType.UploadCharge) return true;
+						//if (transaction.Type==(int)TransactionType.UploadCharge) return true;
+						if (transaction.Type==(int)TransactionType.UploadCharge) updateReceiv = false;
 
 						if (updateSender) {
 							UserInfo receiverInfo = m_moneyDBService.FetchUserInfo(transaction.Receiver);
@@ -1360,7 +1363,10 @@ namespace OpenSim.Grid.MoneyServer
 				if (message!="") requestTable["Message"] = message;
 
 				UserInfo user = m_moneyDBService.FetchUserInfo(userID);
-				if (user!=null) genericCurrencyXMLRPCRequest(requestTable, "UpdateBalance", user.SimIP);
+				if (user!=null) {
+					genericCurrencyXMLRPCRequest(requestTable, "UpdateBalance", user.SimIP);
+					//m_log.InfoFormat("[MONEY RPC] UpdateBalance: Sended UpdateBalance Request to {0}", user.SimIP.ToString());
+				}
 			}
 		}
 
@@ -1522,6 +1528,7 @@ namespace OpenSim.Grid.MoneyServer
 
 					catch (Exception e)
 					{
+						m_log.ErrorFormat("[MONEY RPC] handleGetTransaction: {0}", e.ToString());
 						m_log.ErrorFormat("[MONEY RPC] handleGetTransaction: Can't get transaction information for {0}", transactionUUID.ToString());
 					}
 
