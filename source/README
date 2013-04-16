@@ -1,3 +1,19 @@
+Mod-DTL_NSL-MoneyServer
+
+This is an attempt to integrate the DTL and NSL money servers.
+
+The primary focus is for the project to have all DTL functions *first*.
+NSL functions may be commented out while DTL development completes.
+
+REMEMBER:
+
+OpenSimulator's money functions are limited.
+Modification of OpenSim core may be required.
+
+Patches will be provided when possible.
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //

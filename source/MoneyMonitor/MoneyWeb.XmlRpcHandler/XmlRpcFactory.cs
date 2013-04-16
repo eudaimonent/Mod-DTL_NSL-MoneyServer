@@ -178,7 +178,7 @@ namespace MoneyWeb.XmlRpcHandler
                         //}
                         arrayParm.Add(reqParms);
                         XmlRpcRequest serReq = new XmlRpcRequest(method, arrayParm);
-                        serResp = serReq.Send(seruri, _REQUEST_TIMEOUT);
+                        serResp = serReq.Send(seruri);//, _REQUEST_TIMEOUT);
            
 
                     }
@@ -315,7 +315,7 @@ namespace MoneyWeb.XmlRpcHandler
             try
             {
                 XmlRpcRequest serReq = new XmlRpcRequest(method, arrayParm);
-                serResp = serReq.Send(seruri, _REQUEST_TIMEOUT);
+                serResp = serReq.Send(seruri);//, _REQUEST_TIMEOUT);
 
             }
             catch (Exception ex)

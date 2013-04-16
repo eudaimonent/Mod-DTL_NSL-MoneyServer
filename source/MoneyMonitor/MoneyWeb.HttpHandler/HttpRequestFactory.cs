@@ -17,7 +17,7 @@ using MoneyWeb.Data.Interface;
 
 namespace MoneyWeb.HttpHandler
 {
-    public class HttpRequestFactory :HttpRequestBase,IHttpFactory
+    public class HttpRequestFactory :MoneyWeb.HttpHandler.Base.HttpRequestBase,IHttpFactory
     {
         public HttpRequestFactory()
             : base()

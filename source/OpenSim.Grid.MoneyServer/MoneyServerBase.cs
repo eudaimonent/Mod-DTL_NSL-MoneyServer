@@ -32,7 +32,7 @@ using System.Text;
 using System.Reflection;
 using System.Timers;
 using System.Security.Authentication;
-//using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.X509Certificates;
 
 using Nini.Config;
 using log4net;
@@ -57,7 +57,7 @@ namespace OpenSim.Grid.MoneyServer
 		private string m_certFilename	 = "";
 		private string m_certPassword	 = "";
 		private bool   m_checkClientCert = false;
-		//private X509Certificate2 m_cert  = null;
+		private X509Certificate2 m_cert  = null;
 
 		private int DEAD_TIME;
 		private int MAX_DB_CONNECTION;

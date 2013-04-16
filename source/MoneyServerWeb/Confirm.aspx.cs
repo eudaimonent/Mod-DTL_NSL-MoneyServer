@@ -357,7 +357,7 @@ public partial class Confirm : System.Web.UI.Page
         try
         {
             XmlRpcRequest request = new XmlRpcRequest(method, arrayParams);
-            response = request.Send(m_moneyURI, CONFIRM_REQUEST_TIMEOUT);
+            response = request.Send(m_moneyURI);//, CONFIRM_REQUEST_TIMEOUT);
         }
         catch (Exception ex)
         {
