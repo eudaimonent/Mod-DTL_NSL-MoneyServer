@@ -118,6 +118,7 @@ namespace OpenSim.Grid.MoneyServer
 				if (m_certFilename!="")
 				{
 					m_httpServer = new BaseHttpServer(m_moneyServerPort, true, m_certFilename, m_certPassword);
+                    //m_httpServer = new BaseHttpServer(m_moneyServerPort, false);
 				}
 				else
 				{
@@ -170,13 +171,13 @@ namespace OpenSim.Grid.MoneyServer
 				m_hostName = m_config.GetString("HostName", "localhost");	// be not used
 
 				string checkcert = m_config.GetString("CheckClientCert", "false");
-				if (checkcert.ToLower()=="true") m_checkClientCert = true;
+                if (checkcert.ToLower() == "true") m_checkClientCert = true;
 				m_certFilename = m_config.GetString("ServerCertFilename", "SineWaveCert.pfx");
 				m_certPassword = m_config.GetString("ServerCertPassword", "123");
-				//if (m_certFilename!="" && m_certPassword!="")
-				//{
-				//	m_cert = new X509Certificate2(m_certFilename, m_certPassword);
-				//}
+				if (m_certFilename!="" && m_certPassword!="" && m_checkClientCert != false)
+				{
+					m_cert = new X509Certificate2(m_certFilename, m_certPassword);
+				}
 			}
 			catch (Exception)
 			{

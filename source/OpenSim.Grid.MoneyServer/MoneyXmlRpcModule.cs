@@ -114,7 +114,7 @@ namespace OpenSim.Grid.MoneyServer
 		private string m_BalanceMessageRollBack		= "RollBack the Transaction: L${0} from/to {1}.";
 
 
-		const int MONEYMODULE_REQUEST_TIMEOUT = 30 * 1000;	//30 seconds
+		const int MONEYMODULE_REQUEST_TIMEOUT = 120 * 1000;	//120 seconds
 		private long TicksToEpoch = new DateTime(1970, 1, 1).Ticks;
 
 		private IMoneyDBService m_moneyDBService;
@@ -389,7 +389,7 @@ namespace OpenSim.Grid.MoneyServer
             {
                 if (m_sessionDic[fmID] == senderSessionID && m_secureSessionDic[fmID] == senderSecureSessionID)
                 {
-                    m_log.InfoFormat("[MONEY RPC] handleTransaction: Transfering money from {0} to {1}", fmID, toID);
+                    //m_log.InfoFormat("[MONEY RPC] handleTransaction: Transfering money from {0} to {1}", fmID, toID);
                     int time = (int)((DateTime.Now.Ticks - TicksToEpoch) / 10000000);
                     try
                     {
@@ -413,10 +413,11 @@ namespace OpenSim.Grid.MoneyServer
                             responseData["success"] = false;
                             return response;
                         }
-
                         bool result = m_moneyDBService.addTransaction(transaction);
                         if (result)
                         {
+                            m_log.InfoFormat("[MONEY RPC] handleTransaction: Transfering money from {0} to {1}", fmID, toID);
+
 
                             //send a confirm URL to user via HTTPS.
                             m_log.InfoFormat("[Money] Sending confirm link to client:{0},please wait",
@@ -464,31 +465,20 @@ namespace OpenSim.Grid.MoneyServer
                                         {
                                             m_log.InfoFormat("[Money] Sent confirm link to client:{0} successfully",
                                                           senderID);
-
+                                           
                                             responseData["success"] = true;
                                             return response;
+
                                         }
-                                        /*else
-                                        {
-                                            responseData["success"] = false;
-                                            return response;
-                                        }*/
-
-
+                                        
                                     }
-                                    /*else
-                                    {
-
-                                        responseData["success"] = false;
-                                        return response;
-                                    }*/
+                                    
                                 }
-                               /* else
-                                {
-                                    //responseData["success"] = true;		// No messages for L$0 object. by Fumi.Iseki
-                                    //return response;
-                                } */
-                                
+                                else
+                                 {
+                                     responseData["success"] = true;// No messages for L$0 object. by Fumi.Iseki
+                                 }
+                                return response;
                             }
 
                         }
@@ -511,7 +501,7 @@ namespace OpenSim.Grid.MoneyServer
                 responseData["success"] = false;
                 responseData["message"] = "Session check failure, please re-login later!";
                 return response;
-            }
+      }
 
 			
 		
@@ -716,12 +706,11 @@ namespace OpenSim.Grid.MoneyServer
                                 UserInfo user = m_moneyDBService.FetchUserInfo(transaction.Sender);
                                 if (user != null)
                                 {
-                                    Hashtable responseTable = genericCurrencyXMLRPCRequest(requestTable, "ConfirmTransfer", user.SimIP);
 
-                                    if (responseTable != null && responseTable.ContainsKey("success"))
+                                    if (requestTable != null && requestTable.ContainsKey("success"))
                                     {
                                         //User not online or failed to get object ?
-                                        if (!(bool)responseTable["success"])
+                                        if (!(bool)requestTable["success"])
                                         {
                                             m_log.ErrorFormat("[Money] User: {0} can't get the object,rolling back", transaction.Sender);
                                             if (RollBackTransaction(transaction))
@@ -736,16 +725,18 @@ namespace OpenSim.Grid.MoneyServer
                                         }
                                         else
                                         {
-                                            m_log.InfoFormat("Object has been given,transaction: {0} finished successfully.", transactionID);
+                                            //m_log.InfoFormat("Object has been given,transaction: {0} finished successfully.", transactionID);
+                                            //This is supposed to allow handletransaction to complete. unethika
+                                            m_log.InfoFormat("Transaction taking place: {0} begins.", transactionID);
                                             responseData["success"] = true;
                                             return response;
                                         }
                                     }
                                 }
                                 responseData["success"] = false;
-                                return response;
+                                //return response;
                             }
-                            responseData["success"] = true;
+                            //responseData["success"] = true;
                             return response;
                         }
 
@@ -802,10 +793,10 @@ namespace OpenSim.Grid.MoneyServer
 			XmlRpcResponse moneyServResp = null;
 			try
 			{
-				//XmlRpcRequest moneyModuleReq = new XmlRpcRequest(method, arrayParams);
-				//moneyServResp = moneyModuleReq.Send(uri, MONEYMODULE_REQUEST_TIMEOUT);
 				NSLXmlRpcRequest moneyModuleReq = new NSLXmlRpcRequest(method, arrayParams);
-				moneyServResp = moneyModuleReq.certSend(uri, m_cert, m_checkClientCert, MONEYMODULE_REQUEST_TIMEOUT);
+				moneyServResp = moneyModuleReq.Send(uri, MONEYMODULE_REQUEST_TIMEOUT);
+				//NSLXmlRpcRequest moneyModuleReq = new NSLXmlRpcRequest(method, arrayParams);
+			//	moneyServResp = moneyModuleReq.certSend(uri, m_cert, m_checkClientCert, MONEYMODULE_REQUEST_TIMEOUT);
 			}
 			catch (Exception ex)
 			{
