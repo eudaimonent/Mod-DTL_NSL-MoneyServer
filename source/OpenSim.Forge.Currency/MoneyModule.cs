@@ -217,7 +217,7 @@ namespace OpenSim.Forge.Currency
                 m_moneyServURL = economyConfig.GetString("CurrencyServer");
 
                 string checkcert = economyConfig.GetString("CheckServerCert", "false");
-                if (checkcert.ToLower() == "true") m_checkServerCert = false; //m_checkServerCert = true;
+                if (checkcert.ToLower() == "true") m_checkServerCert = true;
 
                 m_certFilename = economyConfig.GetString("ClientCertFilename", "");
                 m_certPassword = economyConfig.GetString("ClientCertPassword", "");
